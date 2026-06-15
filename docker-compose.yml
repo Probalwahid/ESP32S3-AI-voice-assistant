@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DEBUG=False
+      - FLASK_ENV=production
+      - DATABASE_URL=sqlite:///voice_assistant.db
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      - mqtt
+    networks:
+      - voice-assistant-network
+
+  web-ui:
+    build:
+      context: ./web-ui
+      dockerfile: ../docker/Dockerfile.web
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+    depends_on:
+      - backend
+    networks:
+      - voice-assistant-network
+
+  mqtt:
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./docker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-logs:/mosquitto/log
+    networks:
+      - voice-assistant-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - voice-assistant-network
+
+volumes:
+  mosquitto-data:
+  mosquitto-logs:
+  redis-data:
+
+networks:
+  voice-assistant-network:
+    driver: bridge
