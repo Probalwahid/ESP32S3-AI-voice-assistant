@@ -1,6 +1,9 @@
-# ESP32-S3 AI Voice Assistant
+🎙️ ESP32-S3 AI Voice Assistant
+Designed and Developed by Probal Wahid
 
-A comprehensive AI-powered voice assistant system running on ESP32-S3 with multi-protocol support, speaker recognition, and cloud integration.
+ESP32-S3 License: MIT
+
+A comprehensive AI-powered voice assistant system running on the ESP32-S3 withmicrocontroller. It features multi-protocol support, real-time speaker recognition, and seamless cloud integration.
 
 ## Features
 
